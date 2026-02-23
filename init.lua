@@ -18,6 +18,10 @@ local function track_trudge(player)
 
     if count >= TRUDGE_THRESHOLD then
         minetest.set_node(pos, {name = "default:dirt"})
+        pos.y = pos.y + 1
+        if minetest.registered_nodes[minetest.get_node(pos).name].buildable_to then
+            minetest.remove_node(pos)
+        end
         meta:set_int("trudge_count", 0) -- reset counter
     end
 end
