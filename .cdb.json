@@ -1,0 +1,11 @@
+{
+   "$author" : "bas080",
+   "$version" : "0.0.2",
+   "dev_state" : "ACTIVELY_DEVELOPED",
+   "license" : "LGPL-2.1-only",
+   "media_license" : "LGPL-2.1-only",
+   "name" : "trudged",
+   "short_description" : "A simple mod that converts walked-over soil nodes to dirt.",
+   "title" : "trudged",
+   "type" : "MOD"
+}
