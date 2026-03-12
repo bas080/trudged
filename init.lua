@@ -1,8 +1,9 @@
-local TRUDGE_THRESHOLD = 20 -- steps before changing the node
+local register_on_player_walk = luanti_utils.dofile('register_on_player_walk.lua')
 
-local function track_trudge(player)
-    local pos = vector.round(player:get_pos())
-    pos.y = pos.y - 1  -- node under player
+local TRUDGE_THRESHOLD = 2 -- steps before changing the node
+
+local function track_trudge(pos, _prev_pos, _player)
+    pos = vector.add(pos, {x=0, y=-0.1, z=0})
 
     local node = minetest.get_node(pos)
     local def = minetest.registered_nodes[node.name]
@@ -14,7 +15,6 @@ local function track_trudge(player)
     -- track trudge count on the node itself
     local meta = minetest.get_meta(pos)
     local count = meta:get_int("trudge_count") + 1
-    meta:set_int("trudge_count", count)
 
     if count >= TRUDGE_THRESHOLD then
         minetest.set_node(pos, {name = "default:dirt"})
@@ -22,15 +22,11 @@ local function track_trudge(player)
         if minetest.registered_nodes[minetest.get_node(pos).name].buildable_to then
             minetest.remove_node(pos)
         end
-        meta:set_int("trudge_count", 0) -- reset counter
+
+        return
     end
+
+    meta:set_int("trudge_count", count)
 end
 
-minetest.register_globalstep(function()
-    for _, player in ipairs(minetest.get_connected_players()) do
-        local vel = player:get_velocity()
-        if math.abs(vel.x) > 0.1 or math.abs(vel.z) > 0.1 then
-            track_trudge(player)
-        end
-    end
-end)
+register_on_player_walk(track_trudge)
